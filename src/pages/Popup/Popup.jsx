@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from '../../assets/img/logo.svg';
 import Greetings from '../../containers/Greetings/Greetings';
 import './Popup.css';
@@ -11,14 +11,36 @@ const Popup = () => {
         <p>
           Edit <code>src/pages/Popup/Popup.jsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          onClick={() => {
+            fetch('http://localhost:3000/wallet/newMnemonic', {
+              method: 'POST',
+            })
+              .then((res) => {
+                return res.json();
+              })
+              .then(({ mnemonic }) => {
+                return fetch('http://localhost:3000/wallet/newWallet', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    mnemonic,
+                    password: '12341234',
+                  }),
+                });
+              })
+              .then((res) => {
+                return res.json();
+              })
+              .then((response) => {
+                console.log(response);
+              });
+          }}
         >
-          Learn React!
-        </a>
+          값 받아오기12312
+        </button>
       </header>
     </div>
   );
